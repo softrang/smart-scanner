@@ -14,46 +14,49 @@ let roomRef = null;
 
 // Firebase Configuration Check
 function validConfig() {
-
     const config = window.FIREBASE_CONFIG;
 
-    return config &&
+    return Boolean(
+        config &&
         config.apiKey &&
-        !config.apiKey.includes("YOUR_") &&
-        config.databaseURL &&
-        !config.databaseURL.includes("YOUR_");
-
+        config.authDomain &&
+        config.projectId &&
+        config.appId &&
+        config.databaseURL
+    );
 }
 
 
 // Firebase Initialize
 function initFirebase() {
-
     if (!validConfig()) {
-
-        $("status").textContent = "Firebase Configuration দিন";
+        $("status").textContent =
+            "Firebase Configuration অসম্পূর্ণ";
 
         if (isMobile) {
-
             $("mobileInfo").textContent =
-                "Firebase Configuration পূরণ করুন।";
-
+                "Firebase Configuration পরীক্ষা করুন।";
         }
 
-        return Promise.reject("Firebase config missing");
-
+        return Promise.reject(
+            new Error("Firebase config missing")
+        );
     }
 
-    firebase.initializeApp(window.FIREBASE_CONFIG);
+    if (!firebase.apps.length) {
+        firebase.initializeApp(window.FIREBASE_CONFIG);
+    }
 
     return firebase.auth()
         .signInAnonymously()
         .then(() => {
-
             db = firebase.database();
-
+            console.log("Firebase connected successfully");
+        })
+        .catch(error => {
+            console.error("Firebase initialization error:", error);
+            throw error;
         });
-
 }
 
 
