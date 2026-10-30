@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A3 Smart Scanner</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Firebase -->
+   <script src="https://www.gstatic.com/firebasejs/13.1.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/13.1.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/13.1.0/firebase-database-compat.js"></script>
+
+    <!-- QR Code -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <!-- PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script src="firebase-config.js"></script>
+    <script src="app.js" defer></script>
+</head>
+
+<body>
+
+<header>
+    <h1>📄 A3 Smart Scanner</h1>
+    <p>মোবাইল ক্যামেরা দিয়ে কম্পিউটারে স্ক্যান করুন</p>
+</header>
+
+<main>
+
+    <!-- Desktop Scanner -->
+    <section class="card" id="desktop">
+
+        <h2>কম্পিউটার স্ক্যানার</h2>
+
+        <p>
+            মোবাইল দিয়ে নিচের QR Code স্ক্যান করুন।
+            মোবাইল থেকে ছবি তুললে কম্পিউটারে চলে আসবে।
+        </p>
+
+        <div id="status">Firebase সংযোগ হচ্ছে...</div>
+
+        <div id="qr"></div>
+
+        <p class="room">
+            Room ID:
+            <span id="roomText">Loading...</span>
+        </p>
+
+        <label>
+            কাগজের সাইজ:
+            <select id="paper">
+                <option value="A3">A3</option>
+                <option value="A4">A4</option>
+            </select>
+        </label>
+
+        <button id="newRoom">নতুন QR তৈরি করুন</button>
+
+    </section>
+
+
+    <!-- Mobile Scanner -->
+    <section class="card" id="mobile" hidden>
+
+        <h2>মোবাইল ক্যামেরা</h2>
+
+        <p id="mobileInfo">
+            কম্পিউটারের সাথে সংযোগ হচ্ছে...
+        </p>
+
+        <video id="video" autoplay playsinline muted></video>
+
+        <div class="buttons">
+
+            <button id="start" class="primary">
+                ক্যামেরা চালু
+            </button>
+
+            <button id="capture" class="primary" disabled>
+                ছবি তুলুন ও পাঠান
+            </button>
+
+            <button id="stop" disabled>
+                ক্যামেরা বন্ধ
+            </button>
+
+        </div>
+
+        <input
+            type="file"
+            id="file"
+            accept="image/*"
+            capture="environment"
+            hidden
+        >
+
+        <button id="upload">
+            গ্যালারি থেকে ছবি নিন
+        </button>
+
+    </section>
+
+
+    <!-- Scanned Pages -->
+    <section class="card" id="pagesPanel">
+
+        <h2>
+            স্ক্যান করা পৃষ্ঠা
+            <span id="count">0 page</span>
+        </h2>
+
+        <div id="pages">
+            <div class="empty">
+                এখনো কোনো পৃষ্ঠা নেই
+            </div>
+        </div>
+
+        <div class="buttons export">
+
+            <button id="pdf" class="primary" disabled>
+                Multi-page PDF
+            </button>
+
+            <button id="jpg" disabled>
+                JPG Download
+            </button>
+
+            <button id="print" disabled>
+                Print
+            </button>
+
+            <button id="clear" disabled>
+                সব মুছুন
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    A3 Smart Scanner | Mobile Camera to Desktop
+</footer>
+
+</body>
+</html>
